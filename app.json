@@ -1,37 +1,45 @@
 {
   "expo": {
-    "name": "my-expo-app",
-    "slug": "my-expo-app",
-    "version": "1.0.0",
-
+    "name": "mum's recipes",
+    "slug": "mumsrecipes",
+    "version": "1.0.1",
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
     "experiments": {
       "tsconfigPaths": true
     },
-
-    "plugins": [],
-
+    "plugins": [
+      "expo-audio"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.kami47.mumsrecipes"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e97c5dd0-6b20-4b1f-a6ad-03279bb76407"
       }
     }
   }
