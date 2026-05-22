@@ -1,14 +1,14 @@
 import * as SQLite from 'expo-sqlite';
-import { CreateRecipeRequest, Ingredient, Recipe } from 'types/recipe';
+import { CreateRecipeRequest, Recipe } from 'types/recipe';
 
 export const initDb = async () => {
   const db = await SQLite.openDatabaseAsync('recipes.db');
-
   await db.execAsync(`
 PRAGMA journal_mode = WAL;
-CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, ingredients TEXT NOT NULL, description TEXT NOT NULL);`);
+CREATE TABLE IF NOT EXISTS recipes (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, ingredients TEXT NOT NULL, description TEXT NOT NULL);
+`);
 
-return db;
+  return db;
 };
 
 export async function createRecipe(db: SQLite.SQLiteDatabase, recipe: CreateRecipeRequest) {

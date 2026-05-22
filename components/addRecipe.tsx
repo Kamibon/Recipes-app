@@ -1,7 +1,7 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSQLiteContext } from 'expo-sqlite';
+import { useState } from 'react';
+import { Alert, Text, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AddRecipe = ({ navigation }: any) => {
   const [title, setTitle] = useState('');
@@ -10,27 +10,26 @@ const AddRecipe = ({ navigation }: any) => {
 
   const db = useSQLiteContext();
 
-  const emptyFields = ()=>{
-    setTitle('')
-    setIngredients('')
-    setDescription('')
-  }
+  const emptyFields = () => {
+    setTitle('');
+    setIngredients('');
+    setDescription('');
+  };
 
   const addRecipe = async () => {
-    if(!title.trim() || ingredients.length === 0 || !description.trim()) return
+    if (!title.trim() || ingredients.length === 0 || !description.trim()) return;
     try {
-       await db.runAsync(
-      'INSERT INTO recipes (title, description, ingredients) VALUES (?, ?, ?)',
-      title,
-      description,
-    ingredients
-    );
-    Alert.alert('Ricetta aggiunta con successo!')
-    emptyFields()
+      await db.runAsync(
+        'INSERT INTO recipes (title, description, ingredients) VALUES (?, ?, ?)',
+        title,
+        description,
+        ingredients
+      );
+      Alert.alert('Ricetta aggiunta con successo!');
+      emptyFields();
     } catch (error) {
-      Alert.alert('Aggiunta fallita!:(')
+      Alert.alert('Aggiunta fallita!:(');
     }
-   
   };
 
   return (

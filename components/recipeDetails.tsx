@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { Recipe } from 'types/recipe';
@@ -6,9 +6,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RecipeDetails = ({ route }: any) => {
   const { recipe }: { recipe: Recipe } = route.params;
+
+  const [stopped, setStopped] = useState(true);
 
   const speak = () => {
     setStopped(false);
@@ -34,11 +37,9 @@ const RecipeDetails = ({ route }: any) => {
     if (await Sharing.isAvailableAsync()) {
       await Sharing.shareAsync(uri);
     } else {
-      alert('La condivisione non è disponibile su questo dispositivo');
+      Alert.alert('La condivisione non è disponibile su questo dispositivo');
     }
   };
-
-  const [stopped, setStopped] = useState(true);
 
   useEffect(() => {
     if (stopped) Speech.stop();
@@ -54,7 +55,7 @@ const RecipeDetails = ({ route }: any) => {
   );
 
   return (
-    <View className="flex-1 bg-white p-4">
+    <SafeAreaView className="flex-1 bg-white px-4">
       <View className="flex-row items-center justify-between">
         <Text className="mb-2 text-3xl font-bold">{recipe.title}</Text>
         <Ionicons color={'gray'} onPress={() => createAndSharePdf()} name="share" size={20} />
@@ -71,7 +72,7 @@ const RecipeDetails = ({ route }: any) => {
         className=" mx-auto mt-4 size-12 items-center justify-center rounded-full bg-green-500">
         <Ionicons size={20} color={'white'} name={stopped ? 'play' : 'pause'} />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,29 +1,28 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSQLiteContext } from 'expo-sqlite';
+import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  View,
   ActivityIndicator,
-  RefreshControl,
   Alert,
-  Button,
+  FlatList,
+  RefreshControl,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from 'types/types';
-import React, { useEffect, useState } from 'react';
-import * as SQLite from 'expo-sqlite';
-import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from 'types/recipe';
+import { RootStackParamList } from 'types/types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Tabs'>;
 
 const Home = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const db = SQLite.useSQLiteContext();
+  const db = useSQLiteContext();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +32,7 @@ const Home = () => {
     setIsLoading(true);
     const loadedRecipes = await db.getAllAsync<Recipe>(
       'SELECT * FROM recipes WHERE title LIKE ?',
-      `%${filter!}%`
+      `%${filter}%`
     );
     setIsLoading(false);
     setRecipes(loadedRecipes);
@@ -63,12 +62,14 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if(searchText.trim())
-    setTimeout(() => {
-      try {
-        loadRecipes(searchText);
-      } catch (error) {}
-    }, 3000);
+    loadRecipes();
+  }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      loadRecipes(searchText);
+    }, 300);
+    return () => clearTimeout(handler);
   }, [searchText]);
 
   return (
@@ -80,6 +81,7 @@ const Home = () => {
         <FlatList
           data={recipes}
           keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               colors={['#ff0000', '#00ff00', '#0000ff']}

@@ -10,8 +10,5 @@ export interface Ingredient {
   quantity: number;
 }
 
-export interface CreateRecipeRequest {
-  title: string;
-  ingredients: string;
-  description: string;
-}
+export type CreateRecipeRequest = Omit<Recipe, 'id'>;
+
